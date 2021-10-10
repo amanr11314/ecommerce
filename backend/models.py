@@ -16,8 +16,7 @@ def __generate_unique_code(for_):
 
     while True:
         # random ID of length=LENGTH
-        # id = ''.join(random.choices(string.ascii_letters, string.digits, k=LENGTH)[0])
-        id = ''.join(random.choices([string.ascii_letters, string.digits],k = 12)[0])
+        id = ''.join(random.choices(string.ascii_letters+string.digits,k=LENGTH))
         # # is unique and not in database
         if for_=='Product':
             if Product.objects.filter(p_id = id).count() == 0:
@@ -45,10 +44,10 @@ class Product(models.Model):
     name = models.CharField(max_length=250,null=False)
     desc = models.TextField()
     cost_for_one = models.DecimalField(max_digits=8,decimal_places=2,null=False)
-    discount = models.DecimalField(max_digits=4,decimal_places=2,null=True,default=0.0)
+    discount = models.DecimalField(max_digits=4,decimal_places=2,null=True,default=0.0,blank=True)
     image = models.URLField(max_length=250)
-    size = models.CharField(max_length=250,null=True,default='NONE')
-    color = models.CharField(max_length=250,null=True,default='NONE')
+    size = models.CharField(max_length=250,null=True,default='NONE',blank=True)
+    color = models.CharField(max_length=250,null=True,default='NONE',blank=True)
     # provide a list of categories ot choose with
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
     stock_count = models.PositiveIntegerField(null=False,default=1)

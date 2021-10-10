@@ -33,14 +33,15 @@ class ProductAPIPublic(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = Product.objects.all()
-        # p_id = self.request.query_params.get('p_id',None)
+        p_id = self.request.query_params.get('p_id',None)
+        c_id = self.request.GET.get('category',None)
         # c_id = self.request.query_params.get('category',None)
-        # if p_id is not None:
-        #     queryset = queryset.filter(p_id = p_id)
-        #     return queryset
-        # elif c_id is not None:
-        #     queryset = queryset.filter(c_id = c_id)
-        #     return queryset
+        if p_id is not None:
+            queryset = queryset.filter(p_id = p_id)
+            return queryset
+        elif c_id is not None:
+            queryset = queryset.filter(category = c_id)
+            return queryset
         return queryset
 
 # Category API Public GET request
