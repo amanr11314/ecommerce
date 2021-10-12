@@ -1,7 +1,8 @@
-from rest_framework import viewsets, permissions
+from rest_framework import status, viewsets, permissions
+from rest_framework.response import Response
 
-from .models import Category, Product
-from .serializers import CategorySerializer, ProductSerializer
+from .models import Category, Product, Review
+from .serializers import CategorySerializer, ProductSerializer, ReviewSerializer
 
 # Product API Admin rights
 class ProductAPIAdmin(viewsets.ModelViewSet):
@@ -25,6 +26,32 @@ class CategoryAPIAdmin(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
+class ReviewAPIAuth(viewsets.ModelViewSet):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    serializer_class = ReviewSerializer
+
+    def perform_create(self, serializer):
+        # serializer.save()
+        current_user_name = self.request.user.__getattribute__('first_name')
+        serializer.save(created_by=current_user_name)
+    
+    def create(self, request, *args, **kwargs):
+        try:
+            value = super().create(request, *args, **kwargs)
+            return value
+            # if ValueError('Rating Not Specifc'):
+            #     return Response({"detail":"Rating Not Specific"},status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({"detail":"Rating Not Specific"},status=status.HTTP_400_BAD_REQUEST)
+
+    def perform_destroy(self, instance):
+        pass
+    
+    def perform_update(self, serializer):
+        pass
 
 # Product API Public GET request
 class ProductAPIPublic(viewsets.ReadOnlyModelViewSet):
@@ -55,6 +82,24 @@ class CategoryAPIPublic(viewsets.ReadOnlyModelViewSet):
             queryset = queryset.filter(c_id = c_id)
             return queryset
         return queryset
+
+class ReviewAPIPublic(viewsets.ReadOnlyModelViewSet):
+
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        r_id = self.request.query_params.get('r_id',None)
+        p_id = self.request.GET.get('product',None)
+        if r_id is not None:
+            queryset = Review.objects.filter(r_id = r_id)
+            return queryset
+        elif p_id is not None:
+            queryset = Review.objects.filter(product = p_id)
+            return queryset
+        return []
+
+
+
 
 
 
