@@ -1,8 +1,9 @@
+from functools import partial
 from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
 
 from .models import Category, Product, Review
-from .serializers import CategorySerializer, ProductSerializer, ReviewSerializer
+from .serializers import CategorySerializer, ProductSerializer, ReviewSerializer, ShoppingCartItemRetrieveSerializer, ShoppingCartItemSerializer
 
 # Product API Admin rights
 class ProductAPIAdmin(viewsets.ModelViewSet):
@@ -97,6 +98,29 @@ class ReviewAPIPublic(viewsets.ReadOnlyModelViewSet):
             queryset = Review.objects.filter(product = p_id)
             return queryset
         return []
+
+class ShoppingCartItemAPIAuth(viewsets.ModelViewSet):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    # serializer_class = ShoppingCartItemSerializer
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ShoppingCartItemRetrieveSerializer
+        if self.action == 'retrieve':
+            return ShoppingCartItemRetrieveSerializer
+        return ShoppingCartItemSerializer
+
+    def get_queryset(self):
+        return self.request.user.cart.all()
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    # def update(self, request, *args, **kwargs):
+    #     partial = True
+    #     instac
+    #     return super().update(request, *args, **kwargs)
 
 
 

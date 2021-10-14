@@ -88,5 +88,16 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.CharField(max_length=200,null=True)
 
+class ShoppingCartItem(models.Model):
+    # TODO:: MAKE UNIQUE ROW FOR USER-PRODUCT COMBINED
+    user = models.ForeignKey(User,related_name="cart",on_delete=models.CASCADE,null=True)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,null=True)
+    quantity = models.PositiveIntegerField(default=0)
+    @property
+    def get_item_id(self):
+        return str(self.user) + '$' + self.product
+
+    
+
 
 

@@ -1,11 +1,12 @@
 from django.contrib import admin
-from .models import Category, Product, Review
+from .models import Category, Product, Review, ShoppingCartItem
 # Register your models here.
 
 models = [
     Category,
     Product,
-    Review
+    Review,
+    ShoppingCartItem
 ]
 
 for model in models:

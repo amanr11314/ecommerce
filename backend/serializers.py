@@ -27,4 +27,14 @@ class ReviewSerializer(serializers.ModelSerializer):
             raise ValueError('Rating Not Specifc')
         return super().create(validated_data)
 
+class ShoppingCartItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShoppingCartItem
+        fields = ['product','quantity']
+class ShoppingCartItemRetrieveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShoppingCartItem
+        fields = ['product','quantity']
+    product = ProductSerializer()
+
 
