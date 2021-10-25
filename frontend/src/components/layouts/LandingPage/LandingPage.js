@@ -1,30 +1,22 @@
 import React from "react";
 import "./LandingPage.css";
-function LandingPage() {
+const myImageList = [
+  "https://source.unsplash.com/LAaSoL0LrYs/1920x1080",
+  "https://source.unsplash.com/bF2vsubyHcQ/1920x1080",
+  "https://source.unsplash.com/szFUQoyvrxM/1920x1080",
+];
+function LandingPage({ imageList = myImageList }) {
   return (
     <div id="carousel_1" className="carousel slide" data-bs-ride="carousel">
       <div className="carousel-inner">
-        <div className="carousel-item active">
-          <img
-            src="https://source.unsplash.com/LAaSoL0LrYs/1920x1080"
-            className="d-block w-100"
-            alt="..."
-          />
-        </div>
-        <div className="carousel-item">
-          <img
-            src="https://source.unsplash.com/bF2vsubyHcQ/1920x1080"
-            className="d-block w-100"
-            alt="..."
-          />
-        </div>
-        <div className="carousel-item">
-          <img
-            src="https://source.unsplash.com/szFUQoyvrxM/1920x1080"
-            className="d-block w-100"
-            alt="..."
-          />
-        </div>
+        {imageList.map((image, id) => {
+          const className = "carousel-item" + (id === 0 ? " active" : "");
+          return (
+            <div className={className}>
+              <img src={image} className="d-block w-100" alt="..." />
+            </div>
+          );
+        })}
       </div>
       <button
         className="carousel-control-prev"
