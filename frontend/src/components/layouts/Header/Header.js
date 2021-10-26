@@ -68,15 +68,92 @@ const Header1 = ({ categories = [] }) => {
   const guestLinks = (
     <ul className="d-flex navbar-nav mb-2 mb-lg-0">
       <li className="nav-item">
-        <a className="nav-link" href="#">
+        {/* <a className="nav-link" href="#loginModal">
           Login
-        </a>
+        </a> */}
+        <button
+          type="button"
+          style={{
+            background: "transparent",
+            zIndex: "0",
+            margin: "0",
+            padding: "0",
+            border: "none",
+          }}
+          data-bs-toggle="modal"
+          data-bs-target="#loginModal"
+        >
+          <a className="nav-link" href="#">
+            Login
+          </a>
+        </button>
       </li>
       <li className="nav-item">
         <a className="nav-link" href="#">
           SignUp
         </a>
       </li>
+      <div
+        class="modal fade"
+        id="loginModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div
+            style={{
+              borderRadius: 0,
+            }}
+            className="modal-content"
+          >
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Log in
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <form>
+                <div className="form-group mb-3">
+                  <input
+                    type="text"
+                    className="form-control rounded-pill px-4"
+                    id="recipient-name"
+                    placeholder="E-mail"
+                    name="username"
+                  />
+                </div>
+                <div className="form-group mb-3">
+                  <input
+                    type="password"
+                    className="form-control rounded-pill px-4"
+                    name="password"
+                    placeholder="Password"
+                  />
+                </div>
+              </form>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="button" className="btn btn-primary">
+                Send message
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </ul>
   );
   return (
