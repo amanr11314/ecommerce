@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useForm } from "../../../hooks/useForm";
+import GlobalContext from "../../../context/global-context";
 const CartIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -43,9 +44,40 @@ const LogoutIcon = () => (
     />
   </svg>
 );
-const Header1 = ({ categories = [] }) => {
-  // const { isAuthenticated, user } = context.auth;
-  const isAuthenticated = false;
+
+const PersonIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="currentColor"
+    class="bi bi-person"
+    viewBox="0 0 16 16"
+  >
+    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+  </svg>
+);
+
+export default function Header() {
+  const categories = [
+    {
+      name: "Men",
+      url: "#",
+    },
+    {
+      name: "Women",
+      url: "#",
+    },
+    {
+      name: "Kids",
+      url: "#",
+    },
+  ];
+  const context = useContext(GlobalContext);
+  // useEffect(() => {
+  //   location.reload();
+  // }, [context.auth.token]);
+  const { isAuthenticated, user } = context.auth;
   const authLinks = (
     <ul className="d-flex navbar-nav mb-2 mb-lg-0">
       <li className="nav-item">
@@ -59,10 +91,32 @@ const Header1 = ({ categories = [] }) => {
         </a>
       </li>
       <li className="nav-item">
-        <a className="nav-link" href="#">
+        {/* <a className="nav-link" href="#">
           <LogoutIcon /> Logout
-        </a>
+        </a> */}
+        <button
+          type="button"
+          onClick={context.logout}
+          style={{
+            background: "transparent",
+            zIndex: "0",
+            margin: "0",
+            padding: "0",
+            border: "none",
+          }}
+        >
+          <a className="nav-link" href="#">
+            <LogoutIcon /> Logout
+          </a>
+        </button>
       </li>
+      {user && (
+        <li className="nav-item">
+          <a className="nav-link" href="#">
+            <PersonIcon /> {user.first_name}
+          </a>
+        </li>
+      )}
     </ul>
   );
 
@@ -72,8 +126,8 @@ const Header1 = ({ categories = [] }) => {
   };
   const initailSignUpValues = {
     username: "",
-    firstname: "",
-    lastname: "",
+    first_name: "",
+    last_name: "",
     password: "",
   };
 
@@ -81,17 +135,18 @@ const Header1 = ({ categories = [] }) => {
     useForm(initailSignInValues);
   const handleOnSignIn = (e) => {
     e.preventDefault();
-    // const { username, password } = signInValues;
+    const { username, password } = signInValues;
     console.log(signInValues);
 
-    // context.login(username, password);
+    context.login(username, password);
   };
   const [signUpValues, handleSignUpChange, resetSignUpForm] =
     useForm(initailSignUpValues);
   const handleOnSignUp = (e) => {
     e.preventDefault();
-    // const { username, password } = signInValues;
+    const { username, password, first_name, last_name } = signUpValues;
     console.log(signUpValues);
+    context.register(signUpValues);
 
     // context.login(username, password);
   };
@@ -254,7 +309,7 @@ const Header1 = ({ categories = [] }) => {
                     type="text"
                     className="form-control rounded-pill px-4"
                     placeholder="First Name"
-                    name="firstname"
+                    name="first_name"
                     onChange={handleSignUpChange}
                     value={signUpValues.firstname}
                   />
@@ -264,7 +319,7 @@ const Header1 = ({ categories = [] }) => {
                     type="text"
                     className="form-control rounded-pill px-4"
                     placeholder="Last Name"
-                    name="lastname"
+                    name="last_name"
                     onChange={handleSignUpChange}
                     value={signUpValues.lastname}
                   />
@@ -286,7 +341,7 @@ const Header1 = ({ categories = [] }) => {
                     name="password"
                     placeholder="Password"
                     onChange={handleSignUpChange}
-                    value={signInValues.password}
+                    value={signUpValues.password}
                   />
                 </div>
                 <div className="form-group mb-3">
@@ -368,22 +423,4 @@ const Header1 = ({ categories = [] }) => {
       </div>
     </nav>
   );
-};
-export default function Header() {
-  const categories = [
-    {
-      name: "Men",
-      url: "#",
-    },
-    {
-      name: "Women",
-      url: "#",
-    },
-    {
-      name: "Kids",
-      url: "#",
-    },
-  ];
-
-  return <Header1 categories={categories} />;
 }

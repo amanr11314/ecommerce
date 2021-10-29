@@ -1,13 +1,16 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { render } from "react-dom";
-import Header from "./layouts/Header/Header";
-import LandingPage from "./layouts/LandingPage/LandingPage";
+import Medium from "./Medium";
+import GlobalState from "../context/GlobalState";
+import { Provider as AlertProvider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
 export default function App() {
   return (
-    <Fragment>
-      <Header />
-      <LandingPage />
-    </Fragment>
+    <GlobalState>
+      <AlertProvider template={AlertTemplate}>
+        <Medium />
+      </AlertProvider>
+    </GlobalState>
   );
 }
 const appDiv = document.getElementById("app");
