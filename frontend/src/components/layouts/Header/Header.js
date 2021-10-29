@@ -1,4 +1,5 @@
 import React from "react";
+import { useForm } from "../../../hooks/useForm";
 const CartIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -65,6 +66,36 @@ const Header1 = ({ categories = [] }) => {
     </ul>
   );
 
+  const initailSignInValues = {
+    username: "",
+    password: "",
+  };
+  const initailSignUpValues = {
+    username: "",
+    firstname: "",
+    lastname: "",
+    password: "",
+  };
+
+  const [signInValues, handleSignInChange, resetSignInForm] =
+    useForm(initailSignInValues);
+  const handleOnSignIn = (e) => {
+    e.preventDefault();
+    // const { username, password } = signInValues;
+    console.log(signInValues);
+
+    // context.login(username, password);
+  };
+  const [signUpValues, handleSignUpChange, resetSignUpForm] =
+    useForm(initailSignUpValues);
+  const handleOnSignUp = (e) => {
+    e.preventDefault();
+    // const { username, password } = signInValues;
+    console.log(signUpValues);
+
+    // context.login(username, password);
+  };
+
   const guestLinks = (
     <ul className="d-flex navbar-nav mb-2 mb-lg-0">
       <li className="nav-item">
@@ -89,10 +120,27 @@ const Header1 = ({ categories = [] }) => {
         </button>
       </li>
       <li className="nav-item">
-        <a className="nav-link" href="#">
+        {/* <a className="nav-link" href="#">
           SignUp
-        </a>
+        </a> */}
+        <button
+          type="button"
+          style={{
+            background: "transparent",
+            zIndex: "0",
+            margin: "0",
+            padding: "0",
+            border: "none",
+          }}
+          data-bs-toggle="modal"
+          data-bs-target="#signupModal"
+        >
+          <a className="nav-link" href="#">
+            SignUp
+          </a>
+        </button>
       </li>
+      {/* SignIn Modal Here */}
       <div
         class="modal fade"
         id="loginModal"
@@ -119,14 +167,15 @@ const Header1 = ({ categories = [] }) => {
               ></button>
             </div>
             <div className="modal-body">
-              <form>
+              <form onSubmit={handleOnSignIn}>
                 <div className="form-group mb-3">
                   <input
-                    type="text"
+                    type="email"
                     className="form-control rounded-pill px-4"
-                    id="recipient-name"
                     placeholder="E-mail"
                     name="username"
+                    onChange={handleSignInChange}
+                    value={signInValues.username}
                   />
                 </div>
                 <div className="form-group mb-3">
@@ -135,25 +184,143 @@ const Header1 = ({ categories = [] }) => {
                     className="form-control rounded-pill px-4"
                     name="password"
                     placeholder="Password"
+                    onChange={handleSignInChange}
+                    value={signInValues.password}
                   />
+                </div>
+                <div className="form-group mb-3">
+                  <button
+                    type="submit"
+                    className="form-control btn btn-primary rounded-pill px-4"
+                  >
+                    Sign in
+                  </button>
                 </div>
               </form>
             </div>
             <div className="modal-footer">
               <button
                 type="button"
-                className="btn btn-secondary"
+                style={{
+                  background: "transparent",
+                  zIndex: "0",
+                  margin: "0",
+                  padding: "0",
+                  border: "none",
+                }}
+                class="mx-auto"
                 data-bs-dismiss="modal"
+                data-bs-toggle="modal"
+                data-bs-target="#signupModal"
               >
-                Close
-              </button>
-              <button type="button" className="btn btn-primary">
-                Send message
+                <p>{`Not a member yet?\tSign up`}</p>
               </button>
             </div>
           </div>
         </div>
       </div>
+      {/* SignIn Modal Ends Here */}
+
+      {/* SignUp Modal Here */}
+      <div
+        class="modal fade"
+        id="signupModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div
+            style={{
+              borderRadius: 0,
+            }}
+            className="modal-content"
+          >
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Sign Up
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={handleOnSignUp}>
+                <div className="form-group mb-3">
+                  <input
+                    type="text"
+                    className="form-control rounded-pill px-4"
+                    placeholder="First Name"
+                    name="firstname"
+                    onChange={handleSignUpChange}
+                    value={signUpValues.firstname}
+                  />
+                </div>
+                <div className="form-group mb-3">
+                  <input
+                    type="text"
+                    className="form-control rounded-pill px-4"
+                    placeholder="Last Name"
+                    name="lastname"
+                    onChange={handleSignUpChange}
+                    value={signUpValues.lastname}
+                  />
+                </div>
+                <div className="form-group mb-3">
+                  <input
+                    type="email"
+                    className="form-control rounded-pill px-4"
+                    placeholder="E-mail"
+                    name="username"
+                    onChange={handleSignUpChange}
+                    value={signUpValues.username}
+                  />
+                </div>
+                <div className="form-group mb-3">
+                  <input
+                    type="password"
+                    className="form-control rounded-pill px-4"
+                    name="password"
+                    placeholder="Password"
+                    onChange={handleSignUpChange}
+                    value={signInValues.password}
+                  />
+                </div>
+                <div className="form-group mb-3">
+                  <button
+                    type="submit"
+                    className="form-control btn btn-primary rounded-pill px-4"
+                  >
+                    Sign up
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                style={{
+                  background: "transparent",
+                  zIndex: "0",
+                  margin: "0",
+                  padding: "0",
+                  border: "none",
+                }}
+                class="mx-auto"
+                data-bs-dismiss="modal"
+                data-bs-toggle="modal"
+                data-bs-target="#loginModal"
+              >
+                <p>Are you already a member?</p>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* SignUp Modal Ends Here */}
     </ul>
   );
   return (
