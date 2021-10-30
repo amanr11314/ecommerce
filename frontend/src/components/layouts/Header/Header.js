@@ -136,19 +136,18 @@ export default function Header() {
   const handleOnSignIn = (e) => {
     e.preventDefault();
     const { username, password } = signInValues;
-    console.log(signInValues);
 
     context.login(username, password);
+    //perform force click operation by javascript
+    document.getElementById("closeLogin").click();
   };
   const [signUpValues, handleSignUpChange, resetSignUpForm] =
     useForm(initailSignUpValues);
   const handleOnSignUp = (e) => {
     e.preventDefault();
-    const { username, password, first_name, last_name } = signUpValues;
-    console.log(signUpValues);
     context.register(signUpValues);
-
-    // context.login(username, password);
+    //perform force click operation by javascript
+    document.getElementById("closeSignup").click();
   };
 
   const guestLinks = (
@@ -216,6 +215,7 @@ export default function Header() {
               </h5>
               <button
                 type="button"
+                id="closeLogin"
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
@@ -297,6 +297,7 @@ export default function Header() {
               </h5>
               <button
                 type="button"
+                id="closeSignup"
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
