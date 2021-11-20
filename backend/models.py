@@ -94,8 +94,17 @@ class ShoppingCartItem(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE,null=True)
     quantity = models.PositiveIntegerField(default=0)
     @property
-    def get_item_id(self):
+    def cart_item_id(self):
         return str(self.user) + '$' + self.product
+    
+class WishlistItem(models.Model):
+    # TODO:: MAKE UNIQUE ROW FOR USER-PRODUCT COMBINED
+    user = models.ForeignKey(User,related_name="wishlist",on_delete=models.CASCADE,null=True)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,null=True)
+    @property
+    def wishlist_item_id(self):
+        return str(self.user) + '$' + self.product
+    
 
     
 

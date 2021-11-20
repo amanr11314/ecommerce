@@ -1,9 +1,11 @@
 from functools import partial
+from django.db.models import query
 from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
+from django.http import QueryDict
 
-from .models import Category, Product, Review
-from .serializers import CategorySerializer, ProductSerializer, ReviewSerializer, ShoppingCartItemRetrieveSerializer, ShoppingCartItemSerializer
+from .models import Category, Product, Review, ShoppingCartItem, WishlistItem
+from .serializers import CategorySerializer, ProductSerializer, ReviewSerializer, ShoppingCartItemRetrieveSerializer, ShoppingCartItemSerializer, WishlistItemRetrieveSerializer, WishlistItemSerializer
 
 # Product API Admin rights
 class ProductAPIAdmin(viewsets.ModelViewSet):
@@ -115,12 +117,48 @@ class ShoppingCartItemAPIAuth(viewsets.ModelViewSet):
         return self.request.user.cart.all()
     
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        # data = serializer.validated_data)
+        p_id = self.request.data.get('product')
+        qty = self.request.data.get('quantity')
+        queryset = ShoppingCartItem.objects.filter(user=self.request.user,product=p_id)
+        
+        if(queryset.exists()):
+            print('ITEM EXISTS IN CART!! UPDATING QUANTITY!!!!!')
+            cartItem = queryset[0]
 
-    # def update(self, request, *args, **kwargs):
-    #     partial = True
-    #     instac
-    #     return super().update(request, *args, **kwargs)
+            if qty==0:
+                for item in queryset:
+                    item.delete()
+            else:
+                cartItem.quantity = qty
+                cartItem.save(update_fields=['quantity'])
+        else:
+            serializer.save(user=self.request.user)
+
+class WishlistItemAPIAuth(viewsets.ModelViewSet):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    # serializer_class = ShoppingCartItemSerializer
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return WishlistItemRetrieveSerializer
+        if self.action == 'retrieve':
+            return WishlistItemRetrieveSerializer
+        return WishlistItemSerializer
+
+    def get_queryset(self):
+        return self.request.user.wishlist.all()
+    
+    def perform_create(self, serializer):
+        p_id = self.request.data.get('product')
+        queryset = WishlistItem.objects.filter(user=self.request.user,product=p_id)
+        
+        if(queryset.exists()):
+            print('ITEM EXISTS IN WISHLIST!! REMOVING FROM WISHLIST')
+            queryset[0].delete()
+        else:
+            serializer.save(user=self.request.user)
 
 
 

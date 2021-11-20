@@ -31,10 +31,28 @@ class ShoppingCartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShoppingCartItem
         fields = ['product','quantity']
+    
+    def create(self, validated_data):
+        if(validated_data['quantity'] <= 0):
+            raise ValueError('Quantity Not Specifc')
+        return super().create(validated_data)
 class ShoppingCartItemRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShoppingCartItem
         fields = ['product','quantity']
     product = ProductSerializer()
+
+class WishlistItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WishlistItem
+        fields = ['product']
+class WishlistItemRetrieveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WishlistItem
+        fields = ['product']
+    product = ProductSerializer()
+
+
+
 
 
